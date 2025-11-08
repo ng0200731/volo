@@ -1,0 +1,4 @@
+Flask
+ultralytics
+opencv-python
+pillow
