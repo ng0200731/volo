@@ -15,88 +15,76 @@
             background: #fff;
             color: #000;
             line-height: 1.6;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
+            overflow-x: hidden;
         }
         .header {
-            border-bottom: 1px solid #000;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            background: #000;
+            color: #fff;
+            padding: 15px 20px;
+            border-bottom: 2px solid #000;
+        }
+        .header h1 {
+            font-size: 16px;
         }
         .version {
-            font-size: 12px;
-            color: #666;
+            font-size: 11px;
+            color: #ccc;
         }
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+        .layout {
+            display: flex;
+            height: calc(100vh - 60px);
+        }
+        .sidebar {
+            width: 60px;
+            background: #fff;
+            border-right: 1px solid #000;
+            transition: width 0.3s;
+            overflow: hidden;
+            position: relative;
+        }
+        .sidebar:hover {
+            width: 300px;
+        }
+        .menu-item {
+            padding: 15px;
+            border-bottom: 1px solid #000;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+        .menu-item:hover {
+            background: #f5f5f5;
+        }
+        .menu-item.active {
+            background: #000;
+            color: #fff;
+        }
+        .menu-icon {
+            display: inline-block;
+            width: 30px;
+            text-align: center;
+        }
+        .menu-text {
+            display: inline-block;
+            margin-left: 10px;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
         }
         .section {
-            border: 1px solid #000;
-            padding: 15px;
+            margin-bottom: 20px;
         }
         .section-title {
             font-size: 14px;
             font-weight: bold;
             margin-bottom: 15px;
             text-transform: uppercase;
-        }
-        input, button, select {
-            font-family: monospace;
-            padding: 8px;
-            border: 1px solid #000;
-            background: #fff;
-            color: #000;
-        }
-        input, select {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        button {
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 12px;
-            width: 100%;
-        }
-        button:hover {
-            background: #000;
-            color: #fff;
-        }
-        button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        .customer-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        .customer-item {
-            border: 1px solid #000;
-            padding: 10px;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-        .customer-item:hover {
-            background: #f5f5f5;
-        }
-        .customer-item.selected {
-            background: #000;
-            color: #fff;
-        }
-        .customer-name {
-            font-weight: bold;
-        }
-        .customer-info {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
-        }
-        .customer-item.selected .customer-info {
-            color: #ccc;
+            border-bottom: 1px solid #000;
+            padding-bottom: 5px;
         }
         .stats {
             display: flex;
@@ -125,7 +113,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
         }
         .camera-view img {
             max-width: 100%;
@@ -143,63 +130,258 @@
         .camera-controls button {
             flex: 1;
         }
+        .big-btn { width: 100%; padding: 20px; font-size: 14px; border: 1px solid #000; background: #fff; text-transform: uppercase; cursor: pointer; }
+        .big-btn:hover { background: #000; color: #fff; }
+        input, button, select {
+            font-family: monospace;
+            padding: 8px;
+            border: 1px solid #000;
+            background: #fff;
+            color: #000;
+        }
+        input, select {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        button {
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 12px;
+            width: 100%;
+        }
+        button:hover {
+            background: #000;
+            color: #fff;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .customer-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .customer-item {
+            border: 1px solid #000;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .customer-item:hover {
+            background: #f5f5f5;
+        }
+        .customer-item.selected {
+            background: #000;
+            color: #fff;
+        }
+        .customer-name {
+            font-weight: bold;
+        }
+        .customer-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .customer-item.selected .customer-info {
+            color: #ccc;
+        }
+        .view {
+            display: none;
+        }
+        .view.active {
+            display: block;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: #fff;
+            border: 2px solid #000;
+            padding: 20px;
+            min-width: 400px;
+        }
+        .modal-header {
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 5px;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .modal-buttons button {
+            flex: 1;
+        }
+        .thumb { position: relative; border: 1px solid #000; background: #fff; }
+        .thumb .trash { position: absolute; right: 4px; top: 4px; border: none; background: transparent; color: #f00; opacity: 0; cursor: pointer; padding: 0; width: 22px; height: 22px; }
+        .thumb:hover .trash { opacity: 1; }
+        .thumb .trash:hover { color: #c00; }
+        .confirm-body { text-align: center; }
+        .confirm-trash { color: #f00; display: inline-block; }
+        .confirm-text { margin-top: 10px; font-size: 14px; }
+        .confirm-actions { display: flex; gap: 10px; margin-top: 15px; }
+        .btn { border: 1px solid #000; background: #fff; padding: 8px 14px; cursor: pointer; text-transform: uppercase; font-family: monospace; }
+        .btn-danger { border-color: #f00; color: #f00; }
+        .btn-danger:hover { background: #f00; color: #fff; }
+        .landing {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            flex-direction: column;
+        }
+        .landing-logo {
+            font-size: 150px;
+            font-weight: bold;
+            letter-spacing: 30px;
+            color: #000;
+            margin-left: 30px;
+        }
+        .landing-subtitle {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin-top: 30px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>VOLO CUSTOMER TRAINING SYSTEM</h1>
-            <div class="version" id="version">version 1.0.2</div>
+    <div class="header">
+        <h1>VOLO CUSTOMER TRAINING SYSTEM</h1>
+            <div class="version" id="version">version 1.0.23</div>
+    </div>
+
+    <div class="layout">
+        <div class="sidebar">
+            <div class="menu-item active" onclick="showView('home')">
+                <span class="menu-icon">H</span>
+                <span class="menu-text">Home</span>
+            </div>
+            <div class="menu-item" onclick="showView('dashboard')">
+                <span class="menu-icon">+</span>
+                <span class="menu-text">Add Customer</span>
+            </div>
+            <div class="menu-item" onclick="showView('customers')">
+                <span class="menu-icon">#</span>
+                <span class="menu-text">Customers</span>
+            </div>
+            <div class="menu-item" onclick="showView('camera')">
+                <span class="menu-icon">O</span>
+                <span class="menu-text">Camera</span>
+            </div>
+            <div class="menu-item" onclick="showView('testing')">
+                <span class="menu-icon">T</span>
+                <span class="menu-text">Testing</span>
+            </div>
         </div>
 
-        <div class="stats">
-            <div class="stat-box">
-                <div class="stat-number" id="totalCustomers">0</div>
-                <div class="stat-label">Total Customers</div>
+        <div class="main-content">
+            <div id="home" class="view active">
+                <div class="landing">
+                    <div class="landing-logo">VOLO</div>
+                    <div class="landing-subtitle">Customer Training System</div>
+                </div>
             </div>
-            <div class="stat-box">
-                <div class="stat-number" id="totalImages">0</div>
-                <div class="stat-label">Total Images</div>
-            </div>
-        </div>
 
-        <div class="main-grid">
-            <div>
-                <div class="section" style="margin-bottom: 20px;">
+            <div id="dashboard" class="view">
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-number" id="totalCustomers">0</div>
+                        <div class="stat-label">Total Customers</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="totalImages">0</div>
+                        <div class="stat-label">Total Images</div>
+                    </div>
+                </div>
+
+                <div class="section">
                     <div class="section-title">Add New Customer</div>
                     <input type="text" id="customerName" placeholder="Customer Name">
                     <input type="email" id="customerEmail" placeholder="Customer Email">
                     <button onclick="createCustomer()">Create Customer</button>
                 </div>
+            </div>
 
+            <div id="customers" class="view">
                 <div class="section">
-                    <div class="section-title">Customers</div>
+                    <div class="section-title">All Customers</div>
                     <div class="customer-list" id="customerList">
                         <div style="color: #666;">No customers yet</div>
                     </div>
                 </div>
+                <div class="section">
+                    <div class="section-title">Images</div>
+                    <div style="display:flex; gap:10px; margin-bottom:10px;">
+                        <button class="btn btn-danger" onclick="openDeleteAll()" id="deleteAllBtn" disabled>Delete All</button>
+                    </div>
+                    <div id="thumbnails" class="thumb-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px;"></div>
+                </div>
             </div>
 
-            <div>
+            <div id="camera" class="view">
                 <div class="section">
                     <div class="section-title">Camera View</div>
-                    <div class="camera-view" id="cameraView">
-                        <div class="camera-placeholder">Select a customer and start camera</div>
-                    </div>
-                    <div class="camera-controls">
+                    <select id="cameraCustomerSelect" onchange="selectCustomerForCamera(this.value)">
+                        <option value="">Select Customer</option>
+                    </select>
+                    <div class="camera-controls" style="margin-bottom:10px;">
                         <button id="startBtn" onclick="startCamera()" disabled>Start Camera</button>
                         <button id="captureBtn" onclick="captureImage()" disabled>Capture Image (SPACE)</button>
                         <button id="stopBtn" onclick="stopCamera()" disabled>Stop Camera</button>
                     </div>
+                    <div class="camera-view" id="cameraView">
+                        <div class="camera-placeholder">Select a customer and start camera</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="testing" class="view">
+                <div class="section">
+                    <div class="section-title">Testing</div>
+                    <button class="big-btn" id="testStartBtn" onclick="startTesting()">Open Camera (Testing)</button>
+                    <button class="big-btn" id="testStopBtn" onclick="stopTesting()" style="margin-top:10px; display:none;">Stop Testing</button>
+                    <div class="camera-view" id="testView" style="margin-top:10px;">
+                        <div class="camera-placeholder">Click Open Camera (Testing)</div>
+                    </div>
+                    <div style="margin-top:10px; font-size:12px; color:#666;">If recognized from training images, the customer name will appear on the stream.</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const VERSION = '1.0.2';
+        const VERSION = '1.0.23';
         let selectedCustomerId = null;
         let cameraActive = false;
+        let previewOpen = false;
+        let pendingDelete = null;
+        let lastFiles = [];
+        let testingActive = false;
+
+        function showView(viewName) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+            document.getElementById(viewName).classList.add('active');
+            event.target.closest('.menu-item').classList.add('active');
+        }
 
         async function loadVersion() {
             try {
@@ -243,9 +425,11 @@
                 const customers = await response.json();
 
                 const customerList = document.getElementById('customerList');
+                const cameraSelect = document.getElementById('cameraCustomerSelect');
 
                 if (customers.length === 0) {
                     customerList.innerHTML = '<div style="color: #666;">No customers yet</div>';
+                    cameraSelect.innerHTML = '<option value="">No customers available</option>';
                     document.getElementById('startBtn').disabled = true;
                 } else {
                     customerList.innerHTML = customers.map(customer => `
@@ -259,9 +443,16 @@
                         </div>
                     `).join('');
                     
-                    if (!selectedCustomerId && customers.length > 0) {
+                    cameraSelect.innerHTML = '<option value="">Select Customer</option>' +
+                        customers.map(customer => 
+                            `<option value="${customer.id}" ${customer.id === selectedCustomerId ? 'selected' : ''}>${customer.name} (${customer.image_count} images)</option>`
+                        ).join('');
+
+                    if (selectedCustomerId) {
+                        loadThumbnails(selectedCustomerId);
+                    } else if (customers.length > 0) {
                         selectedCustomerId = customers[0].id;
-                        document.getElementById('startBtn').disabled = false;
+                        loadThumbnails(selectedCustomerId);
                     }
                 }
 
@@ -273,6 +464,16 @@
             }
         }
 
+        function selectCustomerForCamera(customerId) {
+            if (cameraActive) {
+                alert('Stop camera first');
+                document.getElementById('cameraCustomerSelect').value = selectedCustomerId || '';
+                return;
+            }
+            selectedCustomerId = customerId;
+            document.getElementById('startBtn').disabled = !customerId;
+        }
+
         function selectCustomer(customerId) {
             if (cameraActive) {
                 alert('Stop camera first');
@@ -281,6 +482,7 @@
             selectedCustomerId = customerId;
             document.getElementById('startBtn').disabled = false;
             loadCustomers();
+            loadThumbnails(customerId);
         }
 
         async function startCamera() {
@@ -343,6 +545,153 @@
             }
         }
 
+        async function loadThumbnails(customerId) {
+            const grid = document.getElementById('thumbnails');
+            if (!customerId) {
+                grid.innerHTML = '';
+                return;
+            }
+            try {
+                const res = await fetch(`/api/images/${customerId}`);
+                const files = await res.json();
+                lastFiles = Array.isArray(files) ? files : [];
+                document.getElementById('deleteAllBtn').disabled = !(selectedCustomerId && lastFiles.length > 0);
+                if (!Array.isArray(files) || files.length === 0) {
+                    grid.innerHTML = '<div style="color:#666;">No images yet</div>';
+                    return;
+                }
+                grid.innerHTML = files.map(fn => `
+                    <div class="thumb">
+                        <button class="trash" title="Delete" onclick="confirmDelete('${customerId}','${encodeURIComponent(fn)}', event)">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                                <path d="M9 3h6l1 2h4v2H4V5h4l1-2zm2 7h2v8h-2v-8zm-4 0h2v8H7v-8zm8 0h2v8h-2v-8z"></path>
+                            </svg>
+                        </button>
+                        <img onclick="openPreview('${customerId}','${encodeURIComponent(fn)}')" src="/images/${customerId}/${encodeURIComponent(fn)}" alt="${fn}" style="width:100%; height:120px; object-fit:cover; display:block;" />
+                        <div style="font-size:11px; color:#333; padding:6px; word-break:break-all;">${fn}</div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                grid.innerHTML = '<div style="color:#900;">Failed to load images</div>';
+            }
+        }
+
+        async function deleteImage(customerId, file) {
+            try {
+                const res = await fetch(`/api/images/${customerId}/${file}`, { method: 'DELETE' });
+                if (res.ok) {
+                    loadThumbnails(customerId);
+                    loadCustomers();
+                }
+            } catch (e) {}
+        }
+
+        function confirmDelete(customerId, file, ev) {
+            ev.stopPropagation();
+            pendingDelete = { customerId, file };
+            const m = document.getElementById('confirmModal');
+            const nameEl = document.getElementById('confirmName');
+            nameEl.textContent = decodeURIComponent(file);
+            m.classList.add('active');
+        }
+
+        function closeConfirm() {
+            pendingDelete = null;
+            document.getElementById('confirmModal').classList.remove('active');
+        }
+
+        function doDelete() {
+            if (!pendingDelete) return;
+            const { customerId, file } = pendingDelete;
+            closeConfirm();
+            deleteImage(customerId, file);
+        }
+
+        function openDeleteAll() {
+            if (!selectedCustomerId) return;
+            const m = document.getElementById('confirmAllModal');
+            const num = document.getElementById('confirmAllCount');
+            num.textContent = lastFiles.length;
+            m.classList.add('active');
+        }
+        function closeConfirmAll() {
+            document.getElementById('confirmAllModal').classList.remove('active');
+        }
+        async function doDeleteAll() {
+            if (!selectedCustomerId) return;
+            closeConfirmAll();
+            try {
+                const res = await fetch(`/api/images/${selectedCustomerId}`, { method: 'DELETE' });
+                if (res.ok) {
+                    await loadThumbnails(selectedCustomerId);
+                    await loadCustomers();
+                }
+            } catch (e) {}
+        }
+
+        function openPreview(customerId, file) {
+            const src = `/images/${customerId}/${file}`;
+            const m = document.getElementById('previewModal');
+            const img = document.getElementById('previewImage');
+            img.src = src;
+            m.classList.add('active');
+            previewOpen = true;
+        }
+        function closePreview() {
+            const m = document.getElementById('previewModal');
+            const img = document.getElementById('previewImage');
+            img.src = '';
+            m.classList.remove('active');
+            previewOpen = false;
+        }
+
+        async function startTesting() {
+            const view = document.getElementById('testView');
+            const startBtn = document.getElementById('testStartBtn');
+            const stopBtn = document.getElementById('testStopBtn');
+            startBtn.disabled = true;
+            view.innerHTML = '<div class="camera-placeholder">Starting testing camera...</div>';
+            try {
+                if (cameraActive) {
+                    await stopCamera();
+                }
+                const res = await fetch('/api/test/start', { method: 'POST' });
+                if (!res.ok) {
+                    let msg = 'Unknown error';
+                    try {
+                        const data = await res.clone().json();
+                        msg = data.error || msg;
+                    } catch (err) {
+                        const txt = await res.text();
+                        if (txt) msg = txt;
+                    }
+                    view.innerHTML = '<div class="camera-placeholder" style="color:#900;">Failed to start testing: ' + msg + '</div>';
+                    startBtn.disabled = false;
+                    return;
+                }
+                testingActive = true;
+                view.innerHTML = '<img src="/video_test?t=' + Date.now() + '" style="width: 100%;">';
+                startBtn.style.display = 'none';
+                stopBtn.style.display = 'block';
+            } catch (e) {
+                view.innerHTML = '<div class="camera-placeholder" style="color:#900;">Error: ' + (e && e.message ? e.message : e) + '</div>';
+            } finally {
+                if (!testingActive) startBtn.disabled = false;
+            }
+        }
+
+        async function stopTesting() {
+            try { await fetch('/api/test/stop', { method: 'POST' }); } catch (e) {}
+            testingActive = false;
+            const view = document.getElementById('testView');
+            view.innerHTML = '<div class="camera-placeholder">Click Open Camera (Testing)</div>';
+            const startBtn = document.getElementById('testStartBtn');
+            const stopBtn = document.getElementById('testStopBtn');
+            startBtn.style.display = 'block';
+            startBtn.disabled = false;
+            stopBtn.style.display = 'none';
+        }
+
         document.addEventListener('keydown', (e) => {
             if (e.code === 'Space' && cameraActive) {
                 e.preventDefault();
@@ -354,6 +703,46 @@
         loadCustomers();
         setInterval(loadCustomers, 5000);
     </script>
+    <div id="previewModal" class="modal" onclick="closePreview()">
+        <div class="modal-content" onclick="event.stopPropagation(); maxWidth='90%';">
+            <div class="modal-header">Preview <button onclick="closePreview()" style="float:right; border:1px solid #000; background:#fff; cursor:pointer; padding:2px 8px;">Close</button></div>
+            <img id="previewImage" src="" alt="preview" style="max-width:80vw; max-height:70vh; display:block;" />
+        </div>
+    </div>
+    <div id="confirmModal" class="modal" onclick="closeConfirm()">
+        <div class="modal-content" onclick="event.stopPropagation();">
+            <div class="modal-header">Confirm Delete</div>
+            <div class="confirm-body">
+                <div class="confirm-trash">
+                    <svg viewBox="0 0 24 24" width="120" height="120" fill="currentColor" aria-hidden="true">
+                        <path d="M9 3h6l1 2h4v2H4V5h4l1-2zm2 7h2v8h-2v-8zm-4 0h2v8H7v-8zm8 0h2v8h-2v-8z"></path>
+                    </svg>
+                </div>
+                <div class="confirm-text">Delete <span id="confirmName"></span>?</div>
+                <div class="confirm-actions">
+                    <button class="btn" onclick="closeConfirm()">Cancel</button>
+                    <button class="btn btn-danger" onclick="doDelete()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="confirmAllModal" class="modal" onclick="closeConfirmAll()">
+        <div class="modal-content" onclick="event.stopPropagation();">
+            <div class="modal-header">Confirm Delete All</div>
+            <div class="confirm-body">
+                <div class="confirm-trash">
+                    <svg viewBox="0 0 24 24" width="140" height="140" fill="#f00" aria-hidden="true">
+                        <path d="M9 3h6l1 2h4v2H4V5h4l1-2zm2 7h2v8h-2v-8zm-4 0h2v8H7v-8zm8 0h2v8h-2v-8z"></path>
+                    </svg>
+                </div>
+                <div class="confirm-text">Delete all (<span id="confirmAllCount">0</span>) images?</div>
+                <div class="confirm-actions">
+                    <button class="btn" onclick="closeConfirmAll()">Cancel</button>
+                    <button class="btn btn-danger" onclick="doDeleteAll()">Delete All</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
 

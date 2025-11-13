@@ -1,4 +1,4 @@
 Flask
 ultralytics
-opencv-python
+opencv-contrib-python
 pillow
