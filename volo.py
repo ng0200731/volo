@@ -7,7 +7,7 @@ import base64
 from datetime import datetime
 import threading
 
-VERSION = "1.0.23"
+VERSION = "1.0.28"
 
 app = Flask(__name__)
 
