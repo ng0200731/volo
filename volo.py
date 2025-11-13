@@ -7,7 +7,7 @@ import base64
 from datetime import datetime
 import threading
 
-VERSION = "1.0.28"
+VERSION = "1.0.31"
 
 app = Flask(__name__)
 
@@ -287,44 +287,92 @@ class CustomerTrainingSystem:
             self.camera.release()
             self.camera = None
 
+    def _get_customer_color(self, customer_id):
+        """Get a unique color for each customer"""
+        if customer_id is None:
+            return (128, 128, 128)  # Gray for Unknown
+        # Generate consistent color based on customer ID
+        colors = [
+            (255, 0, 0),    # Blue
+            (0, 255, 0),    # Green
+            (0, 0, 255),    # Red
+            (255, 255, 0),  # Cyan
+            (255, 0, 255),  # Magenta
+            (0, 255, 255),  # Yellow
+            (128, 0, 255),  # Purple
+            (255, 128, 0),  # Orange
+        ]
+        # Use hash of customer_id to get consistent color
+        idx = hash(customer_id) % len(colors)
+        return colors[idx]
+    
     def generate_test_frames(self):
+        import cv2
+        import numpy as np
         while self.testing and self.camera:
             success, frame = self.camera.read()
             if not success:
                 break
-            # Run YOLO for visualization boxes
+            # Run YOLO for person detection first
             if self.model is None:
                 self.model = YOLO("yolov8n.pt")
             results = self.model(frame, imgsz=320, verbose=False)[0]
-            annotated = results.plot()
-            # Recognize customer from frame content
-            cid, best_id, best_conf = self._recognize_customer_id(frame)
-            if cid:
-                self.recognition_history.append(cid)
-            else:
-                self.recognition_history.append(None)
-            if len(self.recognition_history) > 10:
-                self.recognition_history.pop(0)
-            label = None
-            if self.recognition_history:
-                counts = {}
-                for item in self.recognition_history:
-                    if item:
-                        counts[item] = counts.get(item, 0) + 1
-                if counts:
-                    top_id = max(counts, key=counts.get)
-                    if counts[top_id] >= max(3, len(self.recognition_history)//2):
-                        label = self.customers.get(top_id, {}).get("name")
-            display_text = "Customer: Unknown"
-            if label:
-                display_text = f"Customer: {label}"
-            elif best_id and best_id in self.customers:
-                guess_name = self.customers[best_id]["name"]
-                conf_txt = f"{best_conf:.1f}" if best_conf is not None else "-"
-                display_text = f"Best Guess: {guess_name} (conf {conf_txt})"
-            import cv2
-            cv2.putText(annotated, display_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2)
-            import cv2
+            annotated = frame.copy()
+            
+            # Recognize each person individually
+            recognized_customers = []
+            if results.boxes is not None and results.boxes.xyxy is not None:
+                boxes = results.boxes.xyxy.cpu().numpy()
+                classes = results.boxes.cls.cpu().numpy() if results.boxes.cls is not None else None
+                # Filter for person class (class 0 in COCO dataset)
+                person_indices = []
+                for i, box in enumerate(boxes):
+                    if classes is None or classes[i] == 0:  # 0 = person class
+                        person_indices.append(i)
+                
+                # Process only person detections
+                for idx in person_indices:
+                    box = boxes[idx]
+                    x1, y1, x2, y2 = box.astype(int)
+                    # Ensure coordinates are within frame bounds
+                    x1 = max(0, x1)
+                    y1 = max(0, y1)
+                    x2 = min(frame.shape[1], x2)
+                    y2 = min(frame.shape[0], y2)
+                    
+                    # Crop person region
+                    person_roi = frame[y1:y2, x1:x2]
+                    if person_roi.size > 0:
+                        # Recognize customer from this person's region
+                        cid, best_id, best_conf = self._recognize_customer_id(person_roi)
+                        customer_name = "Unknown"
+                        customer_id = None
+                        if cid and cid in self.customers:
+                            customer_name = self.customers[cid]["name"]
+                            customer_id = cid
+                        elif best_id and best_id in self.customers:
+                            customer_name = self.customers[best_id]["name"]
+                            customer_id = best_id
+                        
+                        # Get color for this customer
+                        color = self._get_customer_color(customer_id)
+                        recognized_customers.append(customer_name)
+                        
+                        # Draw box with customer-specific color
+                        cv2.rectangle(annotated, (x1, y1), (x2, y2), color, 3)
+                        
+                        # Draw label with customer name
+                        label_text = customer_name
+                        (text_width, text_height), baseline = cv2.getTextSize(
+                            label_text, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2
+                        )
+                        # Background for label
+                        cv2.rectangle(annotated, (x1, y1 - text_height - baseline - 8), 
+                                     (x1 + text_width + 10, y1), color, -1)
+                        # Label text
+                        cv2.putText(annotated, label_text, (x1 + 5, y1 - 5), 
+                                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+            
             cv2.putText(annotated, f"version {VERSION}", (10, annotated.shape[0]-10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 1)
             ret, buffer = cv2.imencode('.jpg', annotated)
             frame_bytes = buffer.tobytes()
